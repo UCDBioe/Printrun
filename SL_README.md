@@ -1,3 +1,8 @@
+To Run
+======
+conda environment: bioprint
+pythonw pronterface.py
+
 Heat Buttons
 ------------
 * gui.py: line 90 - static text "Heat"
