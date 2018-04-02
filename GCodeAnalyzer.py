@@ -146,15 +146,15 @@ class GCodeAnalyzer():
       homeAll = False
       if code_x == None and code_y == None and code_z == None: homeAll = True
       if code_x != None or homeAll:
-	self.hasHomeX = True
+        self.hasHomeX = True
         self.xOffset = 0
         self.x = self.homeX
       if code_y != None or homeAll:
-	self.hasHomeY = True
+        self.hasHomeY = True
         self.yOffset = 0
         self.y = self.homeY
       if code_z != None or homeAll:
-	self.hasHomeZ = True
+        self.hasHomeZ = True
         self.zOffset = 0
         self.z = self.homeZ
       if code_e != None:
@@ -171,15 +171,15 @@ class GCodeAnalyzer():
       homeAll = False
       if code_x == None and code_y == None and code_z == None: homeAll = True
       if code_x != None or homeAll:
-	self.hasHomeX = True
+        self.hasHomeX = True
         self.xOffset = 0
         self.x = self.maxX
       if code_y != None or homeAll:
-	self.hasHomeY = True
+        self.hasHomeY = True
         self.yOffset = 0
         self.y = self.maxY
       if code_z != None or homeAll:
-	self.hasHomeZ = True
+        self.hasHomeZ = True
         self.zOffset = 0
         self.z = self.maxZ
     elif code_g == 90: self.relative = False

@@ -15,7 +15,7 @@
 import wx, time
 from printrun import gcoder
 
-from printrun_utils import imagefile
+from .printrun_utils import imagefile
 
 ID_ABOUT = 101
 ID_EXIT = 110
@@ -30,12 +30,18 @@ class window(wx.Frame):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         toolbar = wx.ToolBar(self, -1, style = wx.TB_HORIZONTAL | wx.NO_BORDER)
-        toolbar.AddSimpleTool(1, wx.Image(imagefile('zoom_in.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Zoom In [+]', '')
-        toolbar.AddSimpleTool(2, wx.Image(imagefile('zoom_out.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Zoom Out [-]', '')
+        # SL Note: Replace AddSimpleTool (deprecated) with AddTool
+        #toolbar.AddSimpleTool(1, wx.Image(imagefile('zoom_in.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Zoom In [+]', '')
+        toolbar.AddTool(1, 'Zoom In [+]', wx.Image(imagefile('zoom_in.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), '')
+        #toolbar.AddSimpleTool(2, wx.Image(imagefile('zoom_out.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Zoom Out [-]', '')
+        toolbar.AddTool(2, 'Zoom Out [-]',  wx.Image(imagefile('zoom_out.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), '')
         toolbar.AddSeparator()
-        toolbar.AddSimpleTool(3, wx.Image(imagefile('arrow_up.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Move Up a Layer [U]', '')
-        toolbar.AddSimpleTool(4, wx.Image(imagefile('arrow_down.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Move Down a Layer [D]', '')
-        toolbar.AddSimpleTool(5, wx.EmptyBitmap(16, 16), 'Reset view', '')
+        #toolbar.AddSimpleTool(3, wx.Image(imagefile('arrow_up.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Move Up a Layer [U]', '')
+        toolbar.AddTool(3, 'Move Up a Layer [U]', wx.Image(imagefile('arrow_up.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), '')
+        #toolbar.AddSimpleTool(4, wx.Image(imagefile('arrow_down.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Move Down a Layer [D]', '')
+        toolbar.AddTool(4, 'Move Down a Layer [D]', wx.Image(imagefile('arrow_down.png'), wx.BITMAP_TYPE_PNG).ConvertToBitmap(), '')
+        #toolbar.AddSimpleTool(5, wx.EmptyBitmap(16, 16), 'Reset view', '')
+        toolbar.AddTool(5, 'Reset View', wx.Bitmap(16, 16), '')
         toolbar.AddSeparator()
         #toolbar.AddSimpleTool(6, wx.Image('./images/inject.png', wx.BITMAP_TYPE_PNG).ConvertToBitmap(), 'Insert Code at start of this layer', '')
         toolbar.Realize()
@@ -149,13 +155,14 @@ class gviz(wx.Panel):
         self.arcpen = wx.Pen(wx.Colour(255, 0, 0), penwidth)
         self.travelpen = wx.Pen(wx.Colour(10, 80, 80), penwidth)
         self.hlpen = wx.Pen(wx.Colour(200, 50, 50), penwidth)
-        self.fades = [wx.Pen(wx.Colour(250-0.6**i*100, 250-0.6**i*100, 200-0.4**i*50), penwidth) for i in range(6)]
+        self.fades = [wx.Pen(wx.Colour(int(250-0.6**i*100), int(250-0.6**i*100), int(200-0.4**i*50)), penwidth) for i in range(6)]
         self.penslist = [self.mainpen, self.travelpen, self.hlpen]+self.fades
         self.showall = 0
         self.hilight = []
         self.hilightarcs = []
         self.dirty = 1
-        self.blitmap = wx.EmptyBitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1)
+        #self.blitmap = wx.EmptyBitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1) SL wx.EmptyBitmap dprecated
+        self.blitmap = wx.Bitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1)
 
     def inject(self):
         #import pdb; pdb.set_trace()
@@ -203,7 +210,9 @@ class gviz(wx.Panel):
 
     def resize(self, event):
         oldside = max(1.0, min(self.size))
-        self.size = self.GetClientSizeTuple()
+        # SL Note: GetClientSizeTuple (deprecated) changed to GetClientSize
+        #self.size = self.GetClientSizeTuple()
+        self.size = self.GetClientSize()
         newside = max(1.0, min(self.size))
         self.basescale = 2*[min(float(self.size[0])/self.build_dimensions[0],
                                 float(self.size[1])/self.build_dimensions[1])]
@@ -225,7 +234,9 @@ class gviz(wx.Panel):
         self.Refresh()
 
     def repaint(self):
-        self.blitmap = wx.EmptyBitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1)
+        # SL Note: EmptyBitmap (deprecated)
+        #self.blitmap = wx.EmptyBitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1)
+        self.blitmap = wx.Bitmap(self.GetClientSize()[0], self.GetClientSize()[1],-1)
         dc = wx.MemoryDC()
         dc.SelectObject(self.blitmap)
         dc.SetBackground(wx.Brush((250, 250, 200)))
