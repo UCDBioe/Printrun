@@ -3,6 +3,12 @@ To Run
 conda environment: bioprint
 pythonw pronterface.py
 
+To Build with py2app
+====================
+* To make a setup.py file: `py2applet --make-setup pronterface.py`
+* To build: `pythonw setup.py py2app -A`
+  * The `-A` makes it a local distribution, remove to make it deployable 
+
 Heat Buttons
 ------------
 * gui.py: line 90 - static text "Heat"
