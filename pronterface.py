@@ -1307,6 +1307,15 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         self.gviz.showall = 1
         wx.CallAfter(self.gviz.Refresh)
 
+    def uvled(self, event):
+        state = event.GetEventObject().GetValue()
+        if state == True:
+            self.p.send_now("M720")
+            event.GetEventObject().SetLabel("LED Off")
+        else:
+            self.p.send_now("M721")
+            event.GetEventObject(). SetLabel("UV LED")
+
     def printfile(self, event):
         self.extra_print_time = 0
         if self.paused:

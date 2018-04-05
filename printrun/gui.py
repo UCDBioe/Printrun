@@ -35,8 +35,19 @@ def make_button(parent, label, callback, tooltip, container = None, size = wx.De
         container.Add(button)
     return button
 
+def make_toggle_button(parent, label, callback, tooltip, pos = wx.DefaultPosition, size = wx.DefaultSize, style = 0, container = None):
+    toggleButton = wx.ToggleButton(parent, wx.ID_ANY, label, style = style, size = size, pos = pos)
+    toggleButton.Bind(wx.EVT_BUTTON, callback)
+    toggleButton.SetToolTip(wx.ToolTip(tooltip))
+    if container:
+        container.Add(toggleButton)
+    return toggleButton
+
 def make_sized_button(*args):
     return make_button(*args, size = buttonSize)
+
+def make_sized_toggle_button(*args):
+    return make_toggle_button(*args, size = buttonSize)
 
 def make_autosize_button(*args):
     return make_button(*args, size = (-1, buttonSize[1]), style = wx.BU_EXACTFIT)
@@ -72,6 +83,12 @@ class LeftPane(wx.GridBagSizer):
                     llts.Add(btn)
             else:
                 self.Add(btn, pos = i.pos, span = i.span)
+            
+        # Make Bioprinter-Specific Button Panel
+        #root.uvledbtn = make_sized_toggle_button(root.panel, _("UV LED"), root.uvled, _("Toggle UV LED"), (6,0))
+        root.uvledbtn = make_sized_toggle_button(root.panel, _("UV LED"), root.uvled, _("Toggle UV LED"))
+        self.Add(root.uvledbtn, pos = (7,0), span = (1,2))
+
 
         root.xyfeedc = wx.SpinCtrl(root.panel,-1, str(root.settings.xy_feedrate), min = 0, max = 50000, size = (70,-1))
         root.xyfeedc.SetToolTip(wx.ToolTip("Set Maximum Speed for X & Y axes (mm/min)"))
